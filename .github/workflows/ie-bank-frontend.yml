@@ -1,13 +1,21 @@
 name: ie-bank-frontend
 
 on:
+  # Run on any branch except main (development)
   push:
+    branches-ignore:
+      - main
+
+  # Run on pull requests to main (UAT environment)
+  pull_request:
     branches:
       - main
+
+  # Allow manual triggering
   workflow_dispatch:
 
 env:
-  FRONTEND_WEBAPP_UAT: YOUR_UAT_WEBAPP_NAME  # This is where you add your UAT web app name
+  FRONTEND_WEBAPP_UAT: czoubi-fe-uat  # Replace with your actual UAT web app name
 
 jobs:
   build:

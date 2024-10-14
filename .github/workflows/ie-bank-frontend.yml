@@ -2,8 +2,11 @@ name: ie-bank-frontend
 
 on:
   push:
+    branches-ignore:
+      - main  # Trigger development on any branch except main
+  pull_request:
     branches:
-      - main
+      - main  # Trigger UAT workflow on pull request to main
   workflow_dispatch:
 
 env:
@@ -26,7 +29,7 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build -- --mode development --dest dist-dev  # Corrected build command
+          npm run build -- --mode development --dest dist-dev
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -49,7 +52,7 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build -- --mode uat --dest dist-uat  # Corrected build command
+          npm run build -- --mode uat --dest dist-uat
 
       - name: Upload artifact for uat job
         uses: actions/upload-artifact@v3
@@ -76,7 +79,7 @@ jobs:
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3  # Use v3 to avoid deprecated versions
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
           package: .
@@ -100,7 +103,7 @@ jobs:
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3  # Use v3 to avoid deprecated versions
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_UAT }}
           package: .
